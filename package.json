@@ -1,9 +1,10 @@
 {
   "name": "gulp-hydra",
   "version": "1.0.0",
-  "description": "Takes your file stream and splits them into many based on filters ",
+  "description": "Takes your file stream and splits them into many streams based on filters ",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint . && jscs src/ test/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -12,5 +13,10 @@
     "splitting"
   ],
   "author": "MasterOfMalt",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^1.9.0",
+    "eslint-config-airbnb": "^1.0.0",
+    "jscs": "^2.5.1"
+  }
 }
