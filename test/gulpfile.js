@@ -45,3 +45,13 @@ gulp.task('hydra-text-markdown', function() {
   return stream.text
     .pipe(gulp.dest('actual-files/text-markdown/text'));
 });
+
+gulp.task('hydra-extension-split', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
+      css: { type: 'ext', filter: 'css' },
+    }));
+
+  return stream.css
+    .pipe(gulp.dest('actual-files/extension-split/'));
+});

@@ -4,12 +4,31 @@ var through2 = require('through2');
 var gutil = require('gulp-util');
 var Readable = require('stream').Readable;
 var path = require('path');
+var _ = require('lodash');
 
-var filterNames = [];
-var filterFunctions = {};
-var outputStreams = {};
+var defaultFilters = {
+  ext: function(extensions) {
+    var extensionArray = extensions.map(function(str) {
+      return str.startsWith('.') ? str : '.' + str;
+    });
+
+    return function(file) {
+      return extensionArray.indexOf(file.ext) !== -1;
+    };
+  },
+};
+
+function getFilterFromObject(obj) {
+  var filterValues;
+  if (obj.type && defaultFilters[obj.type]) {
+    filterValues = _.isArray(obj.filter) ? obj.filter : [ obj.filter ];
+    return defaultFilters[obj.type](filterValues);
+  }
+}
 
 function hydra(options) {
+  var filterNames = [];
+  var outputs = {};
   var keys = Object.keys(options);
   var key;
   var val;
@@ -18,15 +37,32 @@ function hydra(options) {
   var onData;
   var onEnd;
   var retStream;
+  var addFilter;
+  var filterFunc;
 
   for (i = 0; i < keys.length; i++) {
+    addFilter = false;
+    filterFunc = null;
     key = keys[i];
     val = options[key];
-    if (typeof val === 'function') {
+
+    if (_.isFunction(val)) {
+      addFilter = true;
+      filterFunc = val;
+    } else if (_.isObject(val)) {
+      addFilter = true;
+      filterFunc = getFilterFromObject(val);
+    }
+
+    if (addFilter) {
       filterNames.push(key);
-      filterFunctions[key] = val;
-      stream = outputStreams[key] = new Readable({objectMode: true});
+      stream = new Readable({objectMode: true});
       stream._read = function read() {};
+      outputs[key] = {
+        func: filterFunc,
+        stream: stream,
+        files: [],
+      };
     }
   }
 
@@ -43,12 +79,12 @@ function hydra(options) {
     }
 
     filterNames.forEach(function(filter) {
-      var filterFunc = filterFunctions[filter];
+      var output = outputs[filter];
       var parsedPath = path.parse(file.path);
 
-      var result = filterFunc(parsedPath);
+      var result = output.func(parsedPath);
       if (result) {
-        outputStreams[filter].push(file);
+        output.files.push(file);
       }
     });
 
@@ -58,13 +94,21 @@ function hydra(options) {
   };
 
   onEnd = function(cb) {
+    filterNames.forEach(function(filter) {
+      var output = outputs[filter];
+      output.files.forEach(function(file) {
+        output.stream.push(file);
+      });
+      output.stream.push(null);
+    });
+
     return cb();
   };
 
   retStream = through2.obj(onData, onEnd);
 
   filterNames.forEach(function(filter) {
-    retStream[filter] = outputStreams[filter];
+    retStream[filter] = outputs[filter].stream;
   });
 
   return retStream;
