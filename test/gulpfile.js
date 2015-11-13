@@ -46,12 +46,32 @@ gulp.task('hydra-text-markdown', function() {
     .pipe(gulp.dest('actual-files/text-markdown/text'));
 });
 
-gulp.task('hydra-extension-split', function() {
+gulp.task('hydra-extension-split-single-with-dot', function() {
   var stream = gulp.src(files)
     .pipe(hydra({
-      css: { type: 'ext', filter: 'css' },
+      filtered: { type: 'ext', filter: '.css' },
     }));
 
-  return stream.css
-    .pipe(gulp.dest('actual-files/extension-split/'));
+  return stream.filtered
+    .pipe(gulp.dest('actual-files/extension-split/single-with-dot/'));
+});
+
+gulp.task('hydra-extension-split-single-no-dot', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
+      filtered: { type: 'ext', filter: 'css' },
+    }));
+
+  return stream.filtered
+    .pipe(gulp.dest('actual-files/extension-split/single-no-dot/'));
+});
+
+gulp.task('hydra-extension-split-array', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
+      filtered: { type: 'ext', filter: ['.css', '.md' ] },
+    }));
+
+  return stream.filtered
+    .pipe(gulp.dest('actual-files/extension-split/array/'));
 });

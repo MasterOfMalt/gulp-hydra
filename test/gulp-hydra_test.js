@@ -141,13 +141,101 @@ describe('gulp-spritesmash', function() {
       });
     });
 
-    it('should output the same file  in each matched location', function() {
+    it('should output the same file in each matched location', function() {
       var filePath = 'actual-files/text-markdown/';
       assert.doesNotThrow(function() {
         var actualFile = fs.readFileSync(path.join(filePath + 'markdown', 'file4.md'), 'utf8');
         var expectedFile = fs.readFileSync(path.join(filePath + 'text', 'file4.md'), 'utf8');
 
         assert.strictEqual(actualFile, expectedFile);
+      });
+    });
+  });
+
+  describe('running hydra with extension filter', function() {
+    describe('with single argument - not array - with dot', function() {
+      childUtils.run('gulp hydra-extension-split-single-with-dot');
+
+      it('should output files correctly', function(done) {
+        assert.doesNotThrow(function() {
+          var filePath = 'actual-files/extension-split/single-with-dot';
+
+          fs.readdir(filePath, function(err, files) {
+            if (err) {
+              throw err;
+            }
+            files.map(function(file) {
+              return { fileName: file, path: path.join(filePath, file) };
+            }).filter(function(file) {
+              return fs.statSync(file.path).isFile();
+            }).forEach(function(file) {
+              var expectedFilePath =
+                    path.join('expected-files/extension-split/single-with-dot', file.fileName);
+              var actualFile = fs.readFileSync(file.path, 'utf8');
+              var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+              assert.strictEqual(actualFile, expectedFile);
+            });
+            done();
+          });
+        });
+      });
+    });
+
+    describe('with single argument - not array - no dot', function() {
+      childUtils.run('gulp hydra-extension-split-single-no-dot');
+
+      it('should output files correctly', function(done) {
+        assert.doesNotThrow(function() {
+          var filePath = 'actual-files/extension-split/single-no-dot';
+
+          fs.readdir(filePath, function(err, files) {
+            if (err) {
+              throw err;
+            }
+            files.map(function(file) {
+              return { fileName: file, path: path.join(filePath, file) };
+            }).filter(function(file) {
+              return fs.statSync(file.path).isFile();
+            }).forEach(function(file) {
+              var expectedFilePath =
+                    path.join('expected-files/extension-split/single-no-dot', file.fileName);
+              var actualFile = fs.readFileSync(file.path, 'utf8');
+              var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+              assert.strictEqual(actualFile, expectedFile);
+            });
+            done();
+          });
+        });
+      });
+    });
+    describe('with array argument with dot', function() {
+      childUtils.run('gulp hydra-extension-split-array');
+
+      it('should output files correctly', function(done) {
+        assert.doesNotThrow(function() {
+          var filePath = 'actual-files/extension-split/array';
+
+          fs.readdir(filePath, function(err, files) {
+            if (err) {
+              throw err;
+            }
+            files.map(function(file) {
+              return { fileName: file, path: path.join(filePath, file) };
+            }).filter(function(file) {
+              return fs.statSync(file.path).isFile();
+            }).forEach(function(file) {
+              var expectedFilePath =
+                    path.join('expected-files/extension-split/array', file.fileName);
+              var actualFile = fs.readFileSync(file.path, 'utf8');
+              var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+              assert.strictEqual(actualFile, expectedFile);
+            });
+            done();
+          });
+        });
       });
     });
   });
