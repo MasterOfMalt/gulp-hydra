@@ -18,5 +18,9 @@
     "eslint": "^1.9.0",
     "eslint-config-airbnb": "^1.0.0",
     "jscs": "^2.5.1"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.7",
+    "through2": "^2.0.0"
   }
 }
