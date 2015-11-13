@@ -1,0 +1,16 @@
+{
+  "name": "gulp-hydra",
+  "version": "1.0.0",
+  "description": "Takes your file stream and splits them into many based on filters ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulpplugin",
+    "streams",
+    "splitting"
+  ],
+  "author": "MasterOfMalt",
+  "license": "MIT"
+}
