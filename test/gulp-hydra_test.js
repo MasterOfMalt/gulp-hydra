@@ -88,4 +88,67 @@ describe('gulp-spritesmash', function() {
       });
     });
   });
+
+  describe('running hydra with multiple filters with overlapping files', function() {
+    childUtils.run('gulp hydra-text-markdown');
+
+    it('should output markdown files into markdown directory', function(done) {
+      assert.doesNotThrow(function() {
+        var filePath = 'actual-files/text-markdown/markdown';
+
+        fs.readdir(filePath, function(err, files) {
+          if (err) {
+            throw err;
+          }
+          files.map(function(file) {
+            return { fileName: file, path: path.join(filePath, file) };
+          }).filter(function(file) {
+            return fs.statSync(file.path).isFile();
+          }).forEach(function(file) {
+            var expectedFilePath =
+                  path.join('expected-files/text-markdown/markdown', file.fileName);
+            var actualFile = fs.readFileSync(file.path, 'utf8');
+            var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+            assert.strictEqual(actualFile, expectedFile);
+          });
+          done();
+        });
+      });
+    });
+
+    it('should output text files into the text directory', function(done) {
+      assert.doesNotThrow(function() {
+        var filePath = 'actual-files/text-markdown/text';
+
+        fs.readdir(filePath, function(err, files) {
+          if (err) {
+            throw err;
+          }
+          files.map(function(file) {
+            return { fileName: file, path: path.join(filePath, file) };
+          }).filter(function(file) {
+            return fs.statSync(file.path).isFile();
+          }).forEach(function(file) {
+            var expectedFilePath = path.join('expected-files/text-markdown/text', file.fileName);
+            var actualFile = fs.readFileSync(file.path, 'utf8');
+            var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+            assert.strictEqual(actualFile, expectedFile);
+          });
+          done();
+        });
+      });
+    });
+
+    it('should output the same file  in each matched location', function() {
+      var filePath = 'actual-files/text-markdown/';
+      assert.doesNotThrow(function() {
+        var actualFile = fs.readFileSync(path.join(filePath + 'markdown', 'file4.md'), 'utf8');
+        var expectedFile = fs.readFileSync(path.join(filePath + 'text', 'file4.md'), 'utf8');
+
+        assert.strictEqual(actualFile, expectedFile);
+      });
+    });
+  });
 });
