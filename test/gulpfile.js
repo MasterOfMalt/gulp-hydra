@@ -20,16 +20,16 @@ gulp.task('hydra-passthrough', function() {
     .pipe(gulp.dest('actual-files/passthrough/'));
 });
 
-gulp.task('hydra-txtonly', function() {
+gulp.task('hydra-text-files-only', function() {
   var stream = gulp.src(files)
     .pipe(hydra({
       text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
     }));
 
   stream.text
-      .pipe(gulp.dest('actual-files/txtonly/txt'));
+      .pipe(gulp.dest('actual-files/text-files/text'));
   return stream
-    .pipe(gulp.dest('actual-files/txtonly/'));
+    .pipe(gulp.dest('actual-files/text-files/'));
 });
 
 gulp.task('hydra-text-markdown', function() {
