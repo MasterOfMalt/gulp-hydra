@@ -1,4 +1,5 @@
 {
   "preset": "node-style-guide",
-  "safeContextKeyword": ["that"]
+  "safeContextKeyword": ["that"],
+  "maximumLineLength": 100
 }
