@@ -12,11 +12,36 @@ var files = [
   'test-files/file7.png',
 ];
 
-gulp.task('hydra-default-passthrough', function() {
+gulp.task('hydra-passthrough', function() {
   return gulp.src(files)
     .pipe(hydra({
-      css: 'CSS',
-      images: 'Images',
+      text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
+    }))
+    .pipe(gulp.dest('actual-files/passthrough/'));
+});
+
+gulp.task('hydra-txtonly', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
       text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
     }));
+
+  stream.text
+      .pipe(gulp.dest('actual-files/txtonly/txt'));
+  return stream
+    .pipe(gulp.dest('actual-files/txtonly/'));
+});
+
+gulp.task('hydra-text-markdown', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
+      markdown: function(file) { return ['.md'].indexOf(file.ext) !== -1; },
+      text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
+    }));
+
+  stream.markdown
+    .pipe(gulp.dest('actual-files/text-markdown/markdown'));
+
+  return stream.text
+    .pipe(gulp.dest('actual-files/text-markdown/text'));
 });
