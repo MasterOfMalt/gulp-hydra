@@ -1,6 +1,7 @@
 'use strict';
 var gulp = require('gulp');
 var hydra = require('../src/index.js');
+var path = require('path');
 
 var files = [
   'test-files/file1.txt',
@@ -12,10 +13,17 @@ var files = [
   'test-files/file7.png',
 ];
 
+function extensionMatch(extensions) {
+  return function(file) {
+    var parsedPath = path.parse(file.path);
+    return extensions.indexOf(parsedPath.ext) !== -1;
+  };
+}
+
 gulp.task('hydra-passthrough', function() {
   return gulp.src(files)
     .pipe(hydra({
-      text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
+      text: extensionMatch(['.txt', '.md']),
     }))
     .pipe(gulp.dest('actual-files/passthrough/'));
 });
@@ -23,7 +31,7 @@ gulp.task('hydra-passthrough', function() {
 gulp.task('hydra-text-files-only', function() {
   var stream = gulp.src(files)
     .pipe(hydra({
-      text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
+      text: extensionMatch(['.txt', '.md']),
     }));
 
   stream.text
@@ -35,8 +43,8 @@ gulp.task('hydra-text-files-only', function() {
 gulp.task('hydra-text-markdown', function() {
   var stream = gulp.src(files)
     .pipe(hydra({
-      markdown: function(file) { return ['.md'].indexOf(file.ext) !== -1; },
-      text: function(file) { return ['.txt', '.md'].indexOf(file.ext) !== -1; },
+      markdown: extensionMatch(['.md']),
+      text: extensionMatch(['.txt', '.md']),
     }));
 
   stream.markdown

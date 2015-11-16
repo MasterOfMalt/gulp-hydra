@@ -13,7 +13,8 @@ var defaultFilters = {
     });
 
     return function(file) {
-      return extensionArray.indexOf(file.ext) !== -1;
+      var ext = path.extname(file.path);
+      return extensionArray.indexOf(ext) !== -1;
     };
   },
 };
@@ -80,9 +81,8 @@ function hydra(options) {
 
     filterNames.forEach(function(filter) {
       var output = outputs[filter];
-      var parsedPath = path.parse(file.path);
 
-      var result = output.func(parsedPath);
+      var result = output.func(file);
       if (result) {
         output.files.push(file);
       }
