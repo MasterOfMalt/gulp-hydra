@@ -17,7 +17,7 @@ var defaultFilters = {
       return extensionArray.indexOf(ext) !== -1;
     };
   },
-  fileName: function(fileNames) {
+  filename: function(fileNames) {
     return function(file) {
       var parsedFile = path.parse(file.path);
       var i;
@@ -37,6 +37,7 @@ function getFilterFromObject(obj) {
     filterValues = _.isArray(obj.filter) ? obj.filter : [ obj.filter ];
     return defaultFilters[obj.type](filterValues);
   }
+  return null;
 }
 
 function hydra(options) {
@@ -75,6 +76,7 @@ function hydra(options) {
         func: filterFunc,
         stream: stream,
         files: [],
+        type: val.type
       };
     }
   }
@@ -93,12 +95,26 @@ function hydra(options) {
 
     filterNames.forEach(function(filter) {
       var output = outputs[filter];
+      var result;
 
-      var result = output.func(file);
+      if (output.func === null) {
+        if (output.type) {
+          this.emit('error',
+                new gutil.PluginError('gulp-hydra', 'Invalid default filter '
+                  + '`' + output.type + '` for '
+                  + '`' + filter + '` stream'));
+        } else {
+          this.emit('error',
+                new gutil.PluginError('gulp-hydra', 'Invalid filter function for '
+                  + '`' + filter + '` stream'));
+        }
+      }
+
+      result = output.func(file);
       if (result) {
         output.files.push(file);
       }
-    });
+    }, this);
 
     this.push(file);
 

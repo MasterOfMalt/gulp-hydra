@@ -87,7 +87,7 @@ gulp.task('hydra-extension-split-array', function() {
 gulp.task('hydra-filename-filter-single', function() {
   var stream = gulp.src(files)
     .pipe(hydra({
-      filtered: { type: 'fileName', filter: 'file2.css' },
+      filtered: { type: 'filename', filter: 'file2.css' },
     }));
 
   return stream.filtered
@@ -97,7 +97,7 @@ gulp.task('hydra-filename-filter-single', function() {
 gulp.task('hydra-filename-filter-array', function() {
   var stream = gulp.src(files)
     .pipe(hydra({
-      filtered: { type: 'fileName', filter: ['file1.txt', 'file2.css'] },
+      filtered: { type: 'filename', filter: ['file1.txt', 'file2.css'] },
     }));
 
   return stream.filtered
