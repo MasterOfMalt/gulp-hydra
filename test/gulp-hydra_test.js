@@ -210,6 +210,7 @@ describe('gulp-spritesmash', function() {
         });
       });
     });
+
     describe('with array argument with dot', function() {
       childUtils.run('gulp hydra-extension-split-array');
 
@@ -228,6 +229,66 @@ describe('gulp-spritesmash', function() {
             }).forEach(function(file) {
               var expectedFilePath =
                     path.join('expected-files/extension-split/array', file.fileName);
+              var actualFile = fs.readFileSync(file.path, 'utf8');
+              var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+              assert.strictEqual(actualFile, expectedFile);
+            });
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('running hydra with filename filter', function() {
+    describe('with single argument - not array', function() {
+      childUtils.run('gulp hydra-filename-filter-single');
+
+      it('should output files correctly', function(done) {
+        assert.doesNotThrow(function() {
+          var filePath = 'actual-files/filename-filter/single';
+
+          fs.readdir(filePath, function(err, files) {
+            if (err) {
+              throw err;
+            }
+            files.map(function(file) {
+              return { fileName: file, path: path.join(filePath, file) };
+            }).filter(function(file) {
+              return fs.statSync(file.path).isFile();
+            }).forEach(function(file) {
+              var expectedFilePath =
+                    path.join('expected-files/filename-filter/single', file.fileName);
+              var actualFile = fs.readFileSync(file.path, 'utf8');
+              var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+              assert.strictEqual(actualFile, expectedFile);
+            });
+            done();
+          });
+        });
+      });
+    });
+
+    describe('with single argument - array', function() {
+      childUtils.run('gulp hydra-filename-filter-array');
+
+      it('should output files correctly', function(done) {
+        assert.doesNotThrow(function() {
+          var filePath = 'actual-files/filename-filter/array';
+
+          fs.readdir(filePath, function(err, files) {
+            if (err) {
+              throw err;
+            }
+            files.map(function(file) {
+              return { fileName: file, path: path.join(filePath, file) };
+            }).filter(function(file) {
+              return fs.statSync(file.path).isFile();
+            }).forEach(function(file) {
+              var expectedFilePath =
+                    path.join('expected-files/filename-filter/array', file.fileName);
               var actualFile = fs.readFileSync(file.path, 'utf8');
               var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
 

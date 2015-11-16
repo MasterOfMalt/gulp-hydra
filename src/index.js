@@ -17,6 +17,18 @@ var defaultFilters = {
       return extensionArray.indexOf(ext) !== -1;
     };
   },
+  fileName: function(fileNames) {
+    return function(file) {
+      var parsedFile = path.parse(file.path);
+      var i;
+      for (i = 0; i < fileNames.length; i++) {
+        if (parsedFile.base === fileNames[i]) {
+          return true;
+        }
+      }
+      return false;
+    };
+  },
 };
 
 function getFilterFromObject(obj) {

@@ -83,3 +83,23 @@ gulp.task('hydra-extension-split-array', function() {
   return stream.filtered
     .pipe(gulp.dest('actual-files/extension-split/array/'));
 });
+
+gulp.task('hydra-filename-filter-single', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
+      filtered: { type: 'fileName', filter: 'file2.css' },
+    }));
+
+  return stream.filtered
+    .pipe(gulp.dest('actual-files/filename-filter/single/'));
+});
+
+gulp.task('hydra-filename-filter-array', function() {
+  var stream = gulp.src(files)
+    .pipe(hydra({
+      filtered: { type: 'fileName', filter: ['file1.txt', 'file2.css'] },
+    }));
+
+  return stream.filtered
+    .pipe(gulp.dest('actual-files/filename-filter/array/'));
+});
