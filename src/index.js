@@ -117,7 +117,6 @@ function hydra(options) {
     }, this);
 
     this.push(file);
-
     return cb();
   };
 
@@ -138,6 +137,8 @@ function hydra(options) {
   filterNames.forEach(function(filter) {
     retStream[filter] = outputs[filter].stream;
   });
+
+  retStream.resume();
 
   return retStream;
 }

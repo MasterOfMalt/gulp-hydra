@@ -103,3 +103,13 @@ gulp.task('hydra-filename-filter-array', function() {
   return stream.filtered
     .pipe(gulp.dest('actual-files/filename-filter/array/'));
 });
+
+gulp.task('hydra-lots-of-files-single', function() {
+  var stream = gulp.src('test-files/lots-of-files/*.txt')
+    .pipe(hydra({
+      filtered: { type: 'filename', filter: ['file149.txt'] },
+    }));
+
+  return stream.filtered
+    .pipe(gulp.dest('actual-files/lots-of-files/single/'));
+});

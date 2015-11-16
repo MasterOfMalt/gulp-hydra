@@ -300,4 +300,33 @@ describe('gulp-spritesmash', function() {
       });
     });
   });
+
+  describe('running hydra with lots of files', function() {
+    childUtils.run('gulp hydra-lots-of-files-single');
+
+    it('should output files correctly', function(done) {
+      assert.doesNotThrow(function() {
+        var filePath = 'actual-files/lots-of-files/single';
+
+        fs.readdir(filePath, function(err, files) {
+          if (err) {
+            throw err;
+          }
+          files.map(function(file) {
+            return { fileName: file, path: path.join(filePath, file) };
+          }).filter(function(file) {
+            return fs.statSync(file.path).isFile();
+          }).forEach(function(file) {
+            var expectedFilePath =
+                  path.join('expected-files/lots-of-files/single', file.fileName);
+            var actualFile = fs.readFileSync(file.path, 'utf8');
+            var expectedFile = fs.readFileSync(expectedFilePath, 'utf8');
+
+            assert.strictEqual(actualFile, expectedFile);
+          });
+          done();
+        });
+      });
+    });
+  });
 });
