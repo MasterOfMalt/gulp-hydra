@@ -76,7 +76,7 @@ function hydra(options) {
         func: filterFunc,
         stream: stream,
         files: [],
-        type: val.type
+        type: val.type,
       };
     }
   }

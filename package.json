@@ -1,7 +1,7 @@
 {
   "name": "gulp-hydra",
   "version": "1.0.0",
-  "description": "Takes your file stream and splits them into many streams based on filters ",
+  "description": "Takes your file stream and splits them into many streams based on filters",
   "main": "index.js",
   "scripts": {
     "lint": "eslint . && jscs src/ test/",
