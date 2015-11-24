@@ -1,4 +1,5 @@
-# gulp-hydra
+# gulp-hydra [![Build Status](https://img.shields.io/travis/MasterOfMalt/gulp-hydra.svg?style=flat-square)](https://travis-ci.org/MasterOfMalt/gulp-hydra/) [![Build Status](https://img.shields.io/npm/v/gulp-hydra.svg?style=flat-square)](https://www.npmjs.com/package/gulp-hydra)
+
 
 > Cut off one head, two more will take its place. Heil Hydra
 
