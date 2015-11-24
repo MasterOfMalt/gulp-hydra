@@ -11,7 +11,7 @@ before(function(done) {
   rimraf(__dirname + '/actual-files/', done);
 });
 
-describe('gulp-spritesmash', function() {
+describe('gulp-hydra', function() {
   describe('running hydra without any options', function() {
     childUtils.run('gulp hydra-passthrough');
 
