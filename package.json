@@ -1,6 +1,6 @@
 {
   "name": "gulp-hydra",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Takes your file stream and splits them into many streams based on filters",
   "main": "src/index.js",
   "scripts": {
